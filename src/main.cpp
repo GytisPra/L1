@@ -13,6 +13,13 @@
 
 using json = nlohmann::json;
 
+/*
+ *   TODO:
+ *   Sugalvoti savo duomenų strukūrą
+ *   Sugalvoti funkcija kur truputi užtruktu
+ *   Pagal šia funkciją filtruoti savo duomenis
+ */
+
 // Worker thread function
 void consumer(DataMonitor& monitor, SortedResultMonitor& sortedMonitor) {
     while (true) {
@@ -51,7 +58,7 @@ int main() {
     std::vector<Student> students = j["students"];
 
     // Calculate based on data how many worker threads to create
-    if (students.size() <= 2 && students.size() <= 0) {
+    if (students.size() <= 2 && students.size() > 0) {
         NUM_OF_THREADS = 2;
     } else {
         NUM_OF_THREADS = ceil(students.size() / 4);
@@ -68,7 +75,6 @@ int main() {
     // Start adding items to the data monitor
     for (const auto& student : students) {
         monitor.addItem(student);
-        // std::this_thread::sleep_for(std::chrono::milliseconds(1000));  // Simulate work
     }
 
     // Signal that the main thread has finished its job

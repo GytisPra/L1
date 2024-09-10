@@ -14,7 +14,7 @@
 using json = nlohmann::json;
 
 // Worker thread function
-void consumer(DataMonitor& monitor) {
+void consumer(DataMonitor& monitor, SortedResultMonitor& sortedMonitor) {
     while (true) {
         Student student = monitor.removeItem();
 
@@ -25,6 +25,11 @@ void consumer(DataMonitor& monitor) {
         }
 
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));  // Simulate work
+
+        // Random filtering check
+        if (student.Grade > 8) {
+            sortedMonitor.addItemSorted(student);
+        }
     }
 }
 
@@ -32,7 +37,7 @@ int main() {
     int NUM_OF_THREADS = 0;
 
     DataMonitor monitor(15);
-    // SortedResultMonitor sortedMonitor(30);
+    SortedResultMonitor sortedMonitor(30);
 
     std::ifstream file("../example.json");
     if (!file.is_open()) {
@@ -55,14 +60,15 @@ int main() {
     logMsg("Creating ", NUM_OF_THREADS, " worker threads");
 
     std::vector<std::thread> consumers;
-    for (int i = 0; i < NUM_OF_THREADS; ++i) {
+    for (int i = 0; i < NUM_OF_THREADS; i++) {
         // Start worker threads
-        consumers.emplace_back(consumer, std::ref(monitor));
+        consumers.emplace_back(consumer, std::ref(monitor), std::ref(sortedMonitor));
     }
 
     // Start adding items to the data monitor
     for (const auto& student : students) {
         monitor.addItem(student);
+        // std::this_thread::sleep_for(std::chrono::milliseconds(1000));  // Simulate work
     }
 
     // Signal that the main thread has finished its job
@@ -73,8 +79,13 @@ int main() {
         t.join();
     }
 
-    // Deconstruct the data monitor
+    logMsg("Writing results to 'Rezultatai.txt'");
+    sortedMonitor.printToTxt("Rezultatai.txt");
+
+    // Deconstruct both data and sorted result monitors
     monitor.~DataMonitor();
+    sortedMonitor.~SortedResultMonitor();
+    system("pause");
 
     return 0;
 }

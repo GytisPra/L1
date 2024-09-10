@@ -5,7 +5,9 @@
 #include <fstream>
 #include <iostream>
 #include <iterator>
+#include <thread>
 
+#include "Logger.h"
 #include "Student.h"
 
 SortedResultMonitor::SortedResultMonitor(int cap) : capacity(cap), size(0) {
@@ -24,21 +26,33 @@ void SortedResultMonitor::addItemSorted(const Student& student) {
 
     int pos = SortedResultMonitor::findInsertPosition(student);
 
-    for (int i = size; i > pos; i--) {
-        arr[i] = arr[i - 1];
+    {
+        std::unique_lock<std::mutex> lock(mutx);
+        for (int i = size; i > pos; i--) {
+            arr[i] = arr[i - 1];
+        }
+
+        arr[pos] = student;
+        ++size;
     }
-    arr[pos] = student;
-    ++size;
+
+    logMsg("Thread ", std::this_thread::get_id(), " Added student to data monitor, current size ", std::to_string(size));
 }
 
 int SortedResultMonitor::findInsertPosition(const Student& student) const {
+    std::unique_lock<std::mutex> lock(mutx);
+
     int left = 0, right = size;
 
     while (left <= right) {
         int mid = ceil((left + (right - left)) / 2);
 
-        if (left == right) return left;
-        if (mid + 1 == left) return right;
+        if (left == right) {
+            return left;
+        }
+        if (mid + 1 == left) {
+            return right;
+        }
 
         if (arr[mid] < student) {
             left = mid + 1;

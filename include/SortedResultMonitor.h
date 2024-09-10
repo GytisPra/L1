@@ -9,9 +9,7 @@ class SortedResultMonitor {
     Student* arr;
     int capacity;
     int size;
-    mutable std::mutex mutx;                   // mutex to protect threads from trying to reach data at the same time
-    std::condition_variable cv_arr_not_full;   // Conditional variable to signal that the array is not full
-    std::condition_variable cv_arr_not_empty;  // Conditional variable to signal that the array is not empty
+    mutable std::mutex mutx;  // mutex to protect threads from trying to reach data at the same time
 
     int findInsertPosition(const Student& Student) const;  // Find where to insert an item in order to preserve the sorted order
    public:

@@ -32,10 +32,9 @@ void DataMonitor::addItem(const Student& student) {
     }
 
     arr[size++] = student;
+    cv_arr_not_empty.notify_one();
 
     logMsg("Thread ", std::this_thread::get_id(), " Added student to data monitor, current size ", std::to_string(size));
-
-    cv_arr_not_empty.notify_one();
 }
 
 Student DataMonitor::removeItem() {

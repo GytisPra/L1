@@ -84,9 +84,6 @@ int main() {
     logMsg("Writing results to 'Rezultatai.txt'");
     sortedMonitor.printToTxt("Rezultatai.txt");
 
-    // Deconstruct both data and sorted result monitors
-    monitor.~DataMonitor();
-    sortedMonitor.~SortedResultMonitor();
     system("pause");
 
     return 0;

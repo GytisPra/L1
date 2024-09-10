@@ -58,11 +58,7 @@ int main() {
     std::vector<Student> students = j["students"];
 
     // Calculate based on data how many worker threads to create
-    if (students.size() <= 2 && students.size() > 0) {
-        NUM_OF_THREADS = 2;
-    } else {
-        NUM_OF_THREADS = ceil(students.size() / 4);
-    }
+    NUM_OF_THREADS = std::max(2, static_cast<int>(std::ceil(students.size() / 4.0)));
 
     logMsg("Creating ", NUM_OF_THREADS, " worker threads");
 

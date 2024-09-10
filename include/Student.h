@@ -6,12 +6,16 @@
 #include <string>
 
 struct Student {
-    std::string Name;
-    double Grade;
-    int Year;
+    std::string Name = "DEFAULT";
+    double Grade = -1.0;
+    int Year = -1;
 
     bool operator<(const Student& other) const {
         return Name <= other.Name;
+    }
+
+    bool isDefault() const {
+        return Name == "DEFAULT" && Grade == -1.0 && Year == -1;
     }
 };
 

@@ -5,7 +5,13 @@
 #ifndef LOGGER_H
 #define LOGGER_H
 
-inline void logMsg(const std::string& msg) {
+template <typename... Args>
+
+inline void logMsg(const std::string& msg, Args... args) {
+    std::ostringstream stream;
+
+    ((stream << args), ...);
+
     auto now = std::chrono::system_clock::now();
 
     // Convert to time_t (which represents time in seconds)
@@ -16,7 +22,7 @@ inline void logMsg(const std::string& msg) {
 
     // Print the date, time, and log message
     std::cout << "[" << std::put_time(localTime, "%Y-%m-%d %H:%M:%S") << "] "
-              << msg << std::endl;
+              << msg << stream.str() << std::endl;
 }
 
 #endif

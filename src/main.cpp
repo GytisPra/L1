@@ -1,3 +1,4 @@
+#include <Logger.h>
 #include <Student.h>
 
 #include <atomic>
@@ -11,16 +12,9 @@
 
 using json = nlohmann::json;
 
-std::atomic<bool> done(false);
-
 void filter(DataMonitor& monitor, SortedResultMonitor& sortedMonitor);
 
 void filter(DataMonitor& monitor, SortedResultMonitor& sortedMonitor) {
-    if (monitor.getSize() <= 0) {
-        std::cout << "No items left in data monitor" << std::endl;
-        return;
-    }
-
     Student stud = monitor.removeItem();
 
     if (stud.Grade > 8) {
@@ -30,12 +24,14 @@ void filter(DataMonitor& monitor, SortedResultMonitor& sortedMonitor) {
 
 void consumer(DataMonitor& monitor) {
     while (true) {
-        if (done && monitor.getSize() == 0) {
+        Student student = monitor.removeItem();
+
+        if (student.isDefault()) {
+            logMsg("Thread ", std::this_thread::get_id(), " has finished");
             break;
         }
 
-        monitor.removeItem();
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
 }
 
@@ -56,15 +52,17 @@ int main() {
 
     std::cout << "Main thread id: " << std::this_thread::get_id() << std::endl;
 
-    std::thread cons(consumer, std::ref(monitor));
+    std::thread cons1(consumer, std::ref(monitor));
+    std::thread cons2(consumer, std::ref(monitor));
 
     for (const auto& student : students) {
         monitor.addItem(student);
     }
 
-    done = true;
+    monitor.setDone();
 
-    cons.join();
+    cons1.join();
+    cons2.join();
 
     return 0;
 }

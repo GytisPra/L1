@@ -4,6 +4,7 @@
 #include <format>
 #include <iostream>
 #include <iterator>
+#include <thread>
 
 #include "Logger.h"
 #include "Student.h"
@@ -20,12 +21,19 @@ void DataMonitor::addItem(const Student& student) {
     std::unique_lock<std::mutex> lock(mutx);
 
     cv_arr_not_full.wait(lock, [this]() {
+        if (size >= capacity) {
+            logMsg("Thread ", std::this_thread::get_id(), " waiting for space in the data monitor");
+        }
         return size < capacity;
     });
 
+    if (done) {
+        return;
+    }
+
     arr[size++] = student;
 
-    logMsg("Added student to data monitor, current size: " + std::to_string(size));
+    logMsg("Thread ", std::this_thread::get_id(), " Added student to data monitor, current size ", std::to_string(size));
 
     cv_arr_not_empty.notify_one();
 }
@@ -34,14 +42,32 @@ Student DataMonitor::removeItem() {
     std::unique_lock<std::mutex> lock(mutx);
 
     cv_arr_not_empty.wait(lock, [this]() {
-        return size > 0;
+        if (size == 0 && !done) {
+            logMsg("Thread ", std::this_thread::get_id(), " waiting for the data monitor to not be empty");
+        }
+
+        return size > 0 || done;
     });
 
-    logMsg("Removed student from data monitor, current size: " + std::to_string(size - 1));
+    if (size == 0 && done) {
+        return Student{};
+    }
+
+    logMsg("Thread ", std::this_thread::get_id(), " Removed student from data monitor, current size ", std::to_string(size));
 
     cv_arr_not_full.notify_one();
 
     return arr[--size];
+}
+
+void DataMonitor::setDone() {
+    std::unique_lock lock(mutx);
+
+    logMsg("Thread ", std::this_thread::get_id(), " signaled to all threads that it has finished adding all items to data monitor");
+
+    done = true;
+    cv_arr_not_empty.notify_all();
+    cv_arr_not_full.notify_all();
 }
 
 int DataMonitor::getSize() const {

@@ -3,7 +3,7 @@ set(CMAKE_CXX_COMPILER "C:/msys64/ucrt64/bin/g++.exe" CACHE STRING "" FORCE)
 
 cmake_minimum_required(VERSION 3.27.1)
 project(bendra_atmintis)
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 include_directories(include)
 include_directories(single_include)

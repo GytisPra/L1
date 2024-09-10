@@ -1,4 +1,3 @@
-#include <Logger.h>
 #include <Student.h>
 
 #include <atomic>
@@ -9,6 +8,7 @@
 #include <thread>
 
 #include "DataMonitor.h"
+#include "Logger.h"
 #include "SortedResultMonitor.h"
 
 using json = nlohmann::json;

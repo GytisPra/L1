@@ -12,6 +12,7 @@ set(SOURCES
     src/main.cpp
     src/DataMonitor.cpp
     src/SortedResultMonitor.cpp
+    src/Logger.cpp
 )
 
 add_executable(bendra_atmintis ${SOURCES})

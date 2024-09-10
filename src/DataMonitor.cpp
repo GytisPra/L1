@@ -24,7 +24,7 @@ void DataMonitor::addItem(const Student& student) {
         if (size >= capacity) {
             logMsg("Thread ", std::this_thread::get_id(), " waiting for space in the data monitor");
         }
-        return size < capacity;
+        return size < capacity || done;
     });
 
     if (done) {

@@ -2,6 +2,7 @@
 #include <Student.h>
 
 #include <atomic>
+#include <cmath>
 #include <fstream>
 #include <iostream>
 #include <json.hpp>
@@ -11,16 +12,6 @@
 #include "SortedResultMonitor.h"
 
 using json = nlohmann::json;
-
-void filter(DataMonitor& monitor, SortedResultMonitor& sortedMonitor);
-
-void filter(DataMonitor& monitor, SortedResultMonitor& sortedMonitor) {
-    Student stud = monitor.removeItem();
-
-    if (stud.Grade > 8) {
-        sortedMonitor.addItemSorted(stud);
-    }
-}
 
 void consumer(DataMonitor& monitor) {
     while (true) {
@@ -36,6 +27,8 @@ void consumer(DataMonitor& monitor) {
 }
 
 int main() {
+    int NUM_OF_THREADS = 0;
+
     DataMonitor monitor(15);
     // SortedResultMonitor sortedMonitor(30);
 
@@ -50,19 +43,36 @@ int main() {
 
     std::vector<Student> students = j["students"];
 
-    std::cout << "Main thread id: " << std::this_thread::get_id() << std::endl;
+    // Calculate based on data how many worker threads to create
+    if (students.size() <= 2 && students.size() <= 0) {
+        NUM_OF_THREADS = 2;
+    } else {
+        NUM_OF_THREADS = ceil(students.size() / 4);
+    }
 
-    std::thread cons1(consumer, std::ref(monitor));
-    std::thread cons2(consumer, std::ref(monitor));
+    // Start worker threads
+    logMsg("Creating ", NUM_OF_THREADS, " worker threads");
 
+    std::vector<std::thread> consumers;
+    for (int i = 0; i < NUM_OF_THREADS; ++i) {
+        consumers.emplace_back(consumer, std::ref(monitor));
+    }
+
+    // Start adding items to the data monitor
     for (const auto& student : students) {
         monitor.addItem(student);
     }
 
+    // Signal that the main thread has finished its job
     monitor.setDone();
 
-    cons1.join();
-    cons2.join();
+    // Wait for all consumer threads to finish
+    for (auto& t : consumers) {
+        t.join();
+    }
+
+    // Deconstruct the data monitor
+    monitor.~DataMonitor();
 
     return 0;
 }

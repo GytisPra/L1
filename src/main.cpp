@@ -16,8 +16,7 @@ using json = nlohmann::json;
 /*
  *   TODO:
  *   Sugalvoti savo duomenų strukūrą
- *   Sugalvoti funkcija kur truputi užtruktu
- *   Pagal šia funkciją filtruoti savo duomenis
+ *   Sugalvoti funkcija kur truputi užtruktu. Pagal šia funkciją filtruoti savo duomenis
  */
 
 // Worker thread function

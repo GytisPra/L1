@@ -13,16 +13,18 @@
 
 using json = nlohmann::json;
 
+// Worker thread function
 void consumer(DataMonitor& monitor) {
     while (true) {
         Student student = monitor.removeItem();
 
+        // A default student is returned when the monitor has no data and the main thread has finished
         if (student.isDefault()) {
             logMsg("Thread ", std::this_thread::get_id(), " has finished");
             break;
         }
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));  // Simulate work
     }
 }
 
@@ -50,11 +52,11 @@ int main() {
         NUM_OF_THREADS = ceil(students.size() / 4);
     }
 
-    // Start worker threads
     logMsg("Creating ", NUM_OF_THREADS, " worker threads");
 
     std::vector<std::thread> consumers;
     for (int i = 0; i < NUM_OF_THREADS; ++i) {
+        // Start worker threads
         consumers.emplace_back(consumer, std::ref(monitor));
     }
 

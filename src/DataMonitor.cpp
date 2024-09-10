@@ -32,7 +32,7 @@ void DataMonitor::addItem(const Student& student) {
     }
 
     arr[size++] = student;
-    cv_arr_not_empty.notify_one();
+    cv_arr_not_empty.notify_one();  // Notify one thread that the array is no longer empty
 
     logMsg("Thread ", std::this_thread::get_id(), " Added student to data monitor, current size ", std::to_string(size));
 }
@@ -54,7 +54,7 @@ Student DataMonitor::removeItem() {
 
     logMsg("Thread ", std::this_thread::get_id(), " Removed student from data monitor, current size ", std::to_string(size));
 
-    cv_arr_not_full.notify_one();
+    cv_arr_not_full.notify_one();  // Notify a thread that there is now space in the array
 
     return arr[--size];
 }
@@ -65,8 +65,8 @@ void DataMonitor::setDone() {
     logMsg("Thread ", std::this_thread::get_id(), " signaled to all threads that it has finished adding all items to data monitor");
 
     done = true;
-    cv_arr_not_empty.notify_all();
-    cv_arr_not_full.notify_all();
+    cv_arr_not_empty.notify_all();  // Notify any threads that are waiting for data in array
+    cv_arr_not_full.notify_all();   // Notify any threads that are waiting for space in array (optional)
 }
 
 int DataMonitor::getSize() const {

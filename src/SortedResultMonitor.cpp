@@ -61,6 +61,11 @@ void SortedResultMonitor::display() const {
 }
 
 void SortedResultMonitor::printToTxt(const std::string& filename) const {
+    if (size == 0) {
+        std::cout << "No items in sorted result monitor" << std::endl;
+        return;
+    }
+
     std::ofstream resultsFile;
     resultsFile.open(filename);
 

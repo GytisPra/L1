@@ -1,4 +1,6 @@
+#include <condition_variable>
 #include <iostream>
+#include <mutex>
 #include <vector>
 
 #include "Student.h"
@@ -11,6 +13,9 @@ class DataMonitor {
     Student* arr;
     int capacity;
     int size;
+    mutable std::mutex mutx;
+    std::condition_variable cv_arr_not_full;   // Conditional variable to signal that the array is not full
+    std::condition_variable cv_arr_not_empty;  // Conditional variable to signal that the array is not empty
 
    public:
     DataMonitor(int cap = 10);

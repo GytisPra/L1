@@ -1,5 +1,6 @@
 #include <Student.h>
 
+#include <atomic>
 #include <fstream>
 #include <iostream>
 #include <json.hpp>
@@ -7,7 +8,10 @@
 
 #include "DataMonitor.h"
 #include "SortedResultMonitor.h"
+
 using json = nlohmann::json;
+
+std::atomic<bool> done(false);
 
 void filter(DataMonitor& monitor, SortedResultMonitor& sortedMonitor);
 
@@ -24,9 +28,20 @@ void filter(DataMonitor& monitor, SortedResultMonitor& sortedMonitor) {
     }
 }
 
+void consumer(DataMonitor& monitor) {
+    while (true) {
+        if (done && monitor.getSize() == 0) {
+            break;
+        }
+
+        monitor.removeItem();
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    }
+}
+
 int main() {
-    DataMonitor monitor(10);
-    SortedResultMonitor sortedMonitor(30);
+    DataMonitor monitor(15);
+    // SortedResultMonitor sortedMonitor(30);
 
     std::ifstream file("../example.json");
     if (!file.is_open()) {
@@ -37,15 +52,19 @@ int main() {
     nlohmann::json j;
     file >> j;
 
-    for (const auto& studentJson : j["students"]) {
-        Student student = studentJson.get<Student>();
-        monitor.addItem(student);
+    std::vector<Student> students = j["students"];
 
-        filter(monitor, sortedMonitor);
+    std::cout << "Main thread id: " << std::this_thread::get_id() << std::endl;
+
+    std::thread cons(consumer, std::ref(monitor));
+
+    for (const auto& student : students) {
+        monitor.addItem(student);
     }
 
-    sortedMonitor.display();
-    sortedMonitor.printToTxt("rezultatai.txt");
+    done = true;
+
+    cons.join();
 
     return 0;
 }

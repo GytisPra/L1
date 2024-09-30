@@ -7,17 +7,17 @@
 #include <thread>
 
 #include "Logger.h"
-#include "Student.h"
+#include "Word.h"
 
 DataMonitor::DataMonitor(int cap) : capacity(cap), size(0) {
-    arr = new Student[cap];
+    arr = new Word[cap];
 }
 
 DataMonitor::~DataMonitor() {
     delete[] arr;
 }
 
-void DataMonitor::addItem(const Student& student) {
+void DataMonitor::addItem(const Word& word) {
     std::unique_lock<std::mutex> lock(mutx);
 
     cv_arr_not_full.wait(lock, [this]() {
@@ -31,13 +31,13 @@ void DataMonitor::addItem(const Student& student) {
         return;
     }
 
-    arr[size++] = student;
+    arr[size++] = word;
     cv_arr_not_empty.notify_one();  // Notify one thread that the array is no longer empty
 
-    logMsg("Thread ", std::this_thread::get_id(), " Added student to data monitor, current size ", std::to_string(size));
+    logMsg("Thread ", std::this_thread::get_id(), " Added Word to data monitor, current size ", std::to_string(size));
 }
 
-Student DataMonitor::removeItem() {
+Word DataMonitor::removeItem() {
     std::unique_lock<std::mutex> lock(mutx);
 
     cv_arr_not_empty.wait(lock, [this]() {
@@ -49,10 +49,10 @@ Student DataMonitor::removeItem() {
     });
 
     if (size == 0 && done) {
-        return Student{};
+        return Word{};
     }
 
-    logMsg("Thread ", std::this_thread::get_id(), " Removed student from data monitor, current size ", std::to_string(size));
+    logMsg("Thread ", std::this_thread::get_id(), " Removed Word from data monitor, current size ", std::to_string(size));
 
     cv_arr_not_full.notify_one();  // Notify a thread that there is now space in the array
 

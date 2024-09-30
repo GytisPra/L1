@@ -3,14 +3,14 @@
 #include <mutex>
 #include <vector>
 
-#include "Student.h"
+#include "Word.h"
 
 #ifndef DATA_MONITOR_H
 #define DATA_MONITOR_H
 
 class DataMonitor {
    private:
-    Student* arr;
+    Word* arr;
     int capacity;
     int size;
     mutable std::mutex mutx;
@@ -19,13 +19,13 @@ class DataMonitor {
     bool done = false;                         // Flag used to signal to all threads that the main thread has finished adding all items to array
 
    public:
-    DataMonitor(int cap = 10);          // Constructor
-    ~DataMonitor();                     // Deconstructor
-    void addItem(const Student& item);  // Function to add items into the array
-    Student removeItem();               // Function to remove and return the latest item from the array
-    int getSize() const;                // Returns how many items are in an array
-    void display() const;               // Used to print out what is in the data monitor
-    void setDone();                     // Function to signal threads that the main thread has finished adding items to the data monitor
+    DataMonitor(int cap = 10);       // Constructor
+    ~DataMonitor();                  // Deconstructor
+    void addItem(const Word& item);  // Function to add items into the array
+    Word removeItem();               // Function to remove and return the latest item from the array
+    int getSize() const;             // Returns how many items are in an array
+    void display() const;            // Used to print out what is in the data monitor
+    void setDone();                  // Function to signal threads that the main thread has finished adding items to the data monitor
 };
 
 #endif

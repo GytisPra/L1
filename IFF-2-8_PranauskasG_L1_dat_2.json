@@ -1,0 +1,32 @@
+{
+    "words": [
+      { "word": "window", "length": 6, "word_value": 100.86 },
+      { "word": "apple", "length": 5, "word_value": 99.20 },
+      { "word": "elephant", "length": 8, "word_value": 101.38 },
+      { "word": "sunshine", "length": 8, "word_value": 102.50 },
+      { "word": "programming", "length": 11, "word_value": 104.91 },
+      { "word": "mountain", "length": 8, "word_value": 105.12 },
+      { "word": "keyboard", "length": 8, "word_value": 103.12 },
+      { "word": "development", "length": 11, "word_value": 107.00 },
+      { "word": "application", "length": 11, "word_value": 108.82 },
+      { "word": "sequence", "length": 8, "word_value": 102.50 },
+      { "word": "banana", "length": 6, "word_value": 100.17 },
+      { "word": "blueberry", "length": 9, "word_value": 101.33 },
+      { "word": "strawberry", "length": 10, "word_value": 105.10 },
+      { "word": "giraffe", "length": 7, "word_value": 101.43 },
+      { "word": "tenet", "length": 5, "word_value": 102.40 },
+      { "word": "solos", "length": 5, "word_value": 102.00 },
+      { "word": "stats", "length": 5, "word_value": 101.80 },
+      { "word": "rotor", "length": 5, "word_value": 101.60 },
+      { "word": "kayak", "length": 5, "word_value": 100.40 },
+      { "word": "minim", "length": 5, "word_value": 103.20 },
+      { "word": "sagas", "length": 5, "word_value": 100.80 },
+      { "word": "refer", "length": 5, "word_value": 102.20 },
+      { "word": "level", "length": 5, "word_value": 101.00 },
+      { "word": "rotator", "length": 7, "word_value": 101.57 },
+      { "word": "deified", "length": 7, "word_value": 102.86 },
+      { "word": "madam", "length": 5, "word_value": 100.00 },
+      { "word": "civic", "length": 5, "word_value": 101.80 }
+    ]
+  }
+  

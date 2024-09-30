@@ -1,0 +1,30 @@
+{
+    "words": [
+      { "word": "avocado", "length": 7, "word_value": 103.14 },
+      { "word": "apple", "length": 5, "word_value": 99.20 },
+      { "word": "elephant", "length": 8, "word_value": 101.38 },
+      { "word": "sunshine", "length": 8, "word_value": 102.50 },
+      { "word": "programming", "length": 11, "word_value": 104.91 },
+      { "word": "mountain", "length": 8, "word_value": 105.12 },
+      { "word": "keyboard", "length": 8, "word_value": 103.12 },
+      { "word": "development", "length": 11, "word_value": 107.00 },
+      { "word": "application", "length": 11, "word_value": 108.82 },
+      { "word": "sequence", "length": 8, "word_value": 102.50 },
+      { "word": "banana", "length": 6, "word_value": 100.17 },
+      { "word": "blueberry", "length": 9, "word_value": 101.33 },
+      { "word": "strawberry", "length": 10, "word_value": 105.10 },
+      { "word": "giraffe", "length": 7, "word_value": 101.43 },
+      { "word": "avocado", "length": 7, "word_value": 103.14 },
+      { "word": "international", "length": 13, "word_value": 106.54 },
+      { "word": "encyclopedia", "length": 12, "word_value": 105.08 },
+      { "word": "universe", "length": 8, "word_value": 102.75 },
+      { "word": "innovation", "length": 10, "word_value": 104.30 },
+      { "word": "adventure", "length": 9, "word_value": 103.89 },
+      { "word": "electricity", "length": 11, "word_value": 104.18 },
+      { "word": "algorithm", "length": 9, "word_value": 101.67 },
+      { "word": "butterfly", "length": 9, "word_value": 102.89 },
+      { "word": "technology", "length": 10, "word_value": 104.00 },
+      { "word": "university", "length": 10, "word_value": 104.30 }
+    ]
+  }
+  
